@@ -245,7 +245,7 @@ tar xzf $build_dir/.heroku/composer.tar.gz -C $build_dir/.heroku/php bin/compose
 rm $build_dir/.heroku/composer.tar.gz
 mv $build_dir/.heroku/php/bin/composer{,1} # we will need this at the end even if user installs happen with Composer 2
 
-ls -lah $build_dir/.heroku/
+ls -lah $build_dir/.heroku/php-min/
 # this alias is just for now while we install platform packages
 composer() {
 	/app/.heroku/php-min/bin/php /app/.heroku/php/bin/composer1 "$@"

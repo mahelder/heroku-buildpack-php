@@ -231,6 +231,11 @@ curl_retry_on_18 --fail --silent --location -o $build_dir/.heroku/php-min.tar.gz
 tar xzf $build_dir/.heroku/php-min.tar.gz -C $build_dir/.heroku/php-min
 rm $build_dir/.heroku/php-min.tar.gz
 
+cd $build_dir/.heroku/php-min/php-7.4.16
+phpize
+./configure && make && make install
+cd $build_dir
+
 curl_retry_on_18 --fail --silent --location -o $build_dir/.heroku/composer.tar.gz "${s3_url}composer-1.10.20.tar.gz" || {
 	mcount "failures.bootstrap.download.composer"
 	error <<-EOF

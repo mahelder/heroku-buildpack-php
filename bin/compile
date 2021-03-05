@@ -9,8 +9,7 @@ set -eu
 # move hidden files too, just in case
 shopt -s dotglob
 
-status "TESTANDO..."
-status ${STACK}
+echo "TESTANDO..."
 
 # STACK=${STACK:-heroku-18} # Anvil has none
 # build_dir=$1

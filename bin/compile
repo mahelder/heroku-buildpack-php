@@ -218,37 +218,9 @@ fi
 mkdir -p $build_dir/.heroku/php-min
 ln -s $build_dir/.heroku/php-min /app/.heroku/php-min
 
-status "${s3_url}php-min-7.4.16.tar.gz"
+tar xzf $build_dir/libs/php-min.tar.gz -C $build_dir/.heroku/php-min
+tar xzf $build_dir/libs/composer.tar.gz -C $build_dir/.heroku/php bin/composer
 
-curl_retry_on_18 --fail --silent --location -o $build_dir/.heroku/php-min.tar.gz "https://www.php.net/distributions/php-7.4.16.tar.gz" || {
-	mcount "failures.bootstrap.download.php-min"
-	error <<-EOF
-		Failed to download minimal PHP for bootstrapping!
-		
-		This is most likely a temporary internal error. If the problem
-		persists, make sure that you are not running a custom or forked
-		version of the Heroku PHP buildpack which may need updating.
-	EOF
-}
-tar xzf $build_dir/.heroku/php-min.tar.gz -C $build_dir/.heroku/php-min
-rm $build_dir/.heroku/php-min.tar.gz
-
-cd $build_dir/.heroku/php-min/php-7.4.16
-./configure && make && make install
-cd $build_dir
-
-curl_retry_on_18 --fail --silent --location -o $build_dir/.heroku/composer.tar.gz "${s3_url}composer-1.10.20.tar.gz" || {
-	mcount "failures.bootstrap.download.composer"
-	error <<-EOF
-		Failed to download Composer for bootstrapping!
-		
-		This is most likely a temporary internal error. If this problem
-		persists, make sure that you are not running a custom or forked
-		version of the Heroku PHP buildpack which may need updating.
-	EOF
-}
-tar xzf $build_dir/.heroku/composer.tar.gz -C $build_dir/.heroku/php bin/composer
-rm $build_dir/.heroku/composer.tar.gz
 mv $build_dir/.heroku/php/bin/composer{,1} # we will need this at the end even if user installs happen with Composer 2
 
 whereis php

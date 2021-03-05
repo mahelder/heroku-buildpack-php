@@ -218,12 +218,11 @@ fi
 mkdir -p $build_dir/.heroku/php-min
 ln -s $build_dir/.heroku/php-min /app/.heroku/php-min
 
-tar xzf $build_dir/libs/php-min.tar.gz -C $build_dir/.heroku/php-min
-tar xzf $build_dir/libs/composer.tar.gz -C $build_dir/.heroku/php bin/composer
+tar xzf $bp_dir/bin/libs/php-min.tar.gz -C $build_dir/.heroku/php-min
+tar xzf $bp_dir/bin/libs/composer.tar.gz -C $build_dir/.heroku/php bin/composer
 
 mv $build_dir/.heroku/php/bin/composer{,1} # we will need this at the end even if user installs happen with Composer 2
 
-whereis php
 # this alias is just for now while we install platform packages
 composer() {
 	/app/.heroku/php-min/bin/php /app/.heroku/php/bin/composer1 "$@"

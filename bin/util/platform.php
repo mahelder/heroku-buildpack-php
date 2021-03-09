@@ -60,7 +60,7 @@ function mkmetas($package, array &$metapaks, &$have_runtime_req = false) {
 }
 
 // remove first arg (0)
-echo(array_values($array));
+echo(array_values($argv));
 array_shift($argv);
 // base repos we need - no packagist, and the installer plugin path (first arg)
 $repositories = [

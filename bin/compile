@@ -315,38 +315,6 @@ status "Installing platform packages..."
 
 HEROKU_PHP_DEFAULT_RUNTIME_VERSION="^5.6.0"
 export HEROKU_PHP_DEFAULT_RUNTIME_VERSION
-# extract requirements from composer.lock
-/app/.heroku/php-min/bin/php $bp_dir/bin/util/platform.php "$bp_dir/support/installer/" $HEROKU_PHP_PLATFORM_REPOSITORIES 2>&1 >$build_dir/.heroku/php/composer.json | indent || {
-	code=$?
-	if [[ $code -eq 3 ]]; then
-		mcount "failures.platform.composer_lock.runtime_only_in_dev"
-		error <<-EOF
-			Runtime specified in 'require-dev' but not in 'require'!
-			
-			Your '$COMPOSER' contains a 'require-dev' section which
-			specifies a PHP runtime version (either directly, or through
-			a dependency), but no such requirement is present in 'require'
-			or in any of the packages listed in 'require'.
-			
-			Even if dev requirements are not being installed, the entirety
-			of all dependencies needs to resolve to an installable set.
-			Heroku cannot select a default runtime version in this case.
-			
-			Please perform the following steps locally on your computer to
-			resolve this issue before attempting another deploy:
-			1) add a dependency for 'php' to 'require' in '$COMPOSER'
-			2) run 'composer update' to re-generate the lock file
-			3) stage changes using 'git add $COMPOSER $COMPOSER_LOCK'
-			4) commit changes using 'git commit'
-			
-			For more information on selecting PHP runtimes, please refer to
-			https://devcenter.heroku.com/articles/php-support
-		EOF
-	else
-		mcount "failures.platform.composer_lock.parse"
-		error "$composer_lock_parse_error"
-	fi
-}
 
 # reset $COMPOSER for the platform install step
 COMPOSER_bak="$COMPOSER"
